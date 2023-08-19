@@ -1,6 +1,18 @@
 version: '3'
 services:
-    redis:
+    nest_reservation:
+        container_name: nest_reservation
+        build:
+            context: .
+            dockerfile: ./apps/reservations/Dockerfile
+            target: development
+        command: "pnpm run start:dev reservations"
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/usr/src/app
+    nest_redis:
+        container_name: nest_redis
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
@@ -10,7 +22,8 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
-    mongodb:
+    nest_mongodb:
+        container_name: nest_mongodb
         image: mongo:latest
         ports:
             - '${FORWARD_MONGODB_PORT:-27017}:27017'
