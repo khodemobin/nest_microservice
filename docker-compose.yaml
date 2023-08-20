@@ -11,6 +11,21 @@ services:
             - "3000:3000"
         volumes:
             - .:/usr/src/app
+        env_file:
+            - ./apps/reservations/.env
+    nest_auth:
+        container_name: nest_auth
+        build:
+            context: .
+            dockerfile: ./apps/auth/Dockerfile
+            target: development
+        command: "pnpm run start:dev auth"
+        ports:
+            - "3001:3001"
+        volumes:
+            - .:/usr/src/app
+        env_file:
+            - ./apps/auth/.env
     nest_redis:
         container_name: nest_redis
         image: 'redis:alpine'
@@ -30,5 +45,5 @@ services:
         volumes:
             - ./docker/data/mongodb:/data/db
         environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+            MONGO_INITDB_ROOT_USERNAME: default
+            MONGO_INITDB_ROOT_PASSWORD: secret
