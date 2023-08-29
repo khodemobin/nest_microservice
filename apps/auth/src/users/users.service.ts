@@ -19,9 +19,11 @@ export class UsersService {
       password: await bcrypt.hash(createUserDto.password, 10),
     });
   }
+
   private validateCreateUserDto(createUserDto: CreateUserDto) {
     try {
       this.userRepository.findOne({ email: createUserDto.email });
+      console.log('asda');
     } catch (err) {
       return;
     }
