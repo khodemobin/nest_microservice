@@ -9,6 +9,7 @@ services:
         command: "pnpm run start:dev reservations"
         ports:
             - "3000:3000"
+            - "9229:9229"
         volumes:
             - .:/usr/src/app
         env_file:

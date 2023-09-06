@@ -14,13 +14,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: any) => {
-          console.log(request);
-
-          return (
+          const jwt =
             request?.cookies?.Authentication ||
             request?.Authentication ||
-            request?.headers.authorization
-          );
+            request?.headers.authorization;
+
+          return jwt.substring(7, jwt.lenght);
         },
       ]),
       ignoreExpiration: false,
