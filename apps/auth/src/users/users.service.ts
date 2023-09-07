@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRepository } from './users.repository';
 import * as bcrypt from 'bcryptjs';
@@ -18,16 +14,6 @@ export class UsersService {
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
     });
-  }
-
-  async validateUser(email: string, password: string) {
-    const user = await this.userRepository.findOne({ email });
-    const passwordValid = await bcrypt.compare(password, user.password);
-    if (!passwordValid) {
-      throw new UnauthorizedException('Credentials are not valid');
-    }
-
-    return user;
   }
 
   async getUser(getUserDto: GetUserDto) {

@@ -9,7 +9,6 @@ services:
         command: "pnpm run start:dev reservations"
         ports:
             - "3000:3000"
-            - "9229:9229"
         volumes:
             - .:/usr/src/app
         env_file:
@@ -27,6 +26,19 @@ services:
             - .:/usr/src/app
         env_file:
             - ./apps/auth/.env
+    nest_payment:
+        container_name: nest_payment
+        build:
+            context: .
+            dockerfile: ./apps/payments/Dockerfile
+            target: development
+        command: "pnpm run start:dev payments"
+        ports:
+            - "3002:3002"
+        volumes:
+            - .:/usr/src/app
+        env_file:
+            - ./apps/payments/.env
     nest_redis:
         container_name: nest_redis
         image: 'redis:alpine'

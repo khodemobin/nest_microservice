@@ -3,6 +3,7 @@ import { PaymentsModule } from './payments.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(PaymentsModule);
-  await app.listen(3000);
+  console.log('asdas');
+  await app.listen(3002);
 }
 bootstrap();

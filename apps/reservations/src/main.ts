@@ -16,6 +16,6 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   const config: ConfigService = app.get(ConfigService);
 
-  await app.listen(config.get('APP_PORT'));
+  await app.listen(config.get('HTTP_PORT'));
 }
 bootstrap();

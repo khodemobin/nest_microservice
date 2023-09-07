@@ -22,7 +22,7 @@ import { AUTH_SERVICE } from '@app/common/constants/services';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        APP_PORT: Joi.number().required(),
+        HTTP_PORT: Joi.number().required(),
         MONGODB_URI: Joi.string().required(),
         MONGODB_USERNAME: Joi.string().required(),
         MONGODB_PASSWORD: Joi.string().required(),
