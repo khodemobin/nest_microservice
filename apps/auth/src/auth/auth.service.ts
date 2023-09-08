@@ -3,10 +3,10 @@ import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from './interfaces/token-payload.interface';
-import { UserRepository } from './users/users.repository';
+import { UserRepository } from '../users/users.repository';
 import * as bcrypt from 'bcryptjs';
 import { LoginDto } from './dto/login.dto';
-import { UserDocument } from './users/models/user.schema';
+import { UserDocument } from '../users/models/user.schema';
 import { LoginResponseType } from './types/login-response.type';
 
 @Injectable()

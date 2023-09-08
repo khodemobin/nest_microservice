@@ -1,2 +1,3 @@
 export const AUTH_SERVICE = 'auth';
-export const RESERVATION_SERVICE = 'reservation';
+export const PAYMENTS_SERVICE = 'payments';
+export const RESERVATIONS_SERVICE = 'reservations';
