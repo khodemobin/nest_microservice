@@ -1,19 +1,19 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { JwtAuthGuard } from '@app/common';
-import { User } from '@app/common/decorators';
 import { UserDto } from '@app/common/dto';
+import { CurrentUser } from '@app/common/decorators';
 
 @UseGuards(JwtAuthGuard)
 @Controller('reservations')
@@ -23,7 +23,7 @@ export class ReservationsController {
   @Post()
   async create(
     @Body() createReservationDto: CreateReservationDto,
-    @User() user: UserDto,
+    @CurrentUser() user: UserDto,
   ) {
     return this.reservationsService.create(createReservationDto, user);
   }

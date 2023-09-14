@@ -13,6 +13,8 @@ export class UsersService {
     return this.userRepository.create({
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
+      createdAt: undefined,
+      updatedAt: undefined,
     });
   }
 

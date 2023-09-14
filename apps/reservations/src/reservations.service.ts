@@ -16,8 +16,9 @@ export class ReservationsService {
   async create(createReservationDto: CreateReservationDto, user: UserDto) {
     return this.reservationsRepo.create({
       ...createReservationDto,
-      timestamp: new Date(),
       userId: user._id,
+      createdAt: undefined,
+      updatedAt: undefined,
     });
   }
 

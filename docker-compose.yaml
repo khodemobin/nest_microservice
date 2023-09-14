@@ -1,62 +1,62 @@
 version: '3'
 services:
-    nest_reservation:
-        container_name: nest_reservation
-        build:
-            context: .
-            dockerfile: ./apps/reservations/Dockerfile
-            target: development
-        command: "pnpm run start:dev reservations"
-        ports:
-            - "3000:3000"
-        volumes:
-            - .:/usr/src/app
-        env_file:
-            - ./apps/reservations/.env
-    nest_auth:
-        container_name: nest_auth
-        build:
-            context: .
-            dockerfile: ./apps/auth/Dockerfile
-            target: development
-        command: "pnpm run start:dev auth"
-        ports:
-            - "3001:3001"
-        volumes:
-            - .:/usr/src/app
-        env_file:
-            - ./apps/auth/.env
-    nest_payment:
-        container_name: nest_payment
-        build:
-            context: .
-            dockerfile: ./apps/payments/Dockerfile
-            target: development
-        command: "pnpm run start:dev payments"
-        ports:
-            - "3002:3002"
-        volumes:
-            - .:/usr/src/app
-        env_file:
-            - ./apps/payments/.env
-    nest_redis:
-        container_name: nest_redis
-        image: 'redis:alpine'
-        ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
-        volumes:
-            - './docker/data/redis:/data'
-        healthcheck:
-            test: ["CMD", "redis-cli", "ping"]
-            retries: 3
-            timeout: 5s
-    nest_mongodb:
-        container_name: nest_mongodb
-        image: mongo:latest
-        ports:
-            - '${FORWARD_MONGODB_PORT:-27017}:27017'
-        volumes:
-            - ./docker/data/mongodb:/data/db
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: default
-            MONGO_INITDB_ROOT_PASSWORD: secret
+  nest_reservation:
+    container_name: nest_reservation
+    build:
+      context: .
+      dockerfile: ./apps/reservations/Dockerfile
+      target: development
+    command: "pnpm run start:dev reservations"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - ./apps/reservations/.env
+  nest_auth:
+    container_name: nest_auth
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: "pnpm run start:dev auth"
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - ./apps/auth/.env
+  nest_payment:
+    container_name: nest_payment
+    build:
+      context: .
+      dockerfile: ./apps/payments/Dockerfile
+      target: development
+    command: "pnpm run start:dev payments"
+    ports:
+      - "3002:3002"
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - ./apps/payments/.env
+  nest_redis:
+    container_name: nest_redis
+    image: 'redis:alpine'
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - './docker/data/redis:/data'
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      retries: 3
+      timeout: 5s
+  nest_mongodb:
+    container_name: nest_mongodb
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./docker/data/mongodb:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: default
+      MONGO_INITDB_ROOT_PASSWORD: secret
