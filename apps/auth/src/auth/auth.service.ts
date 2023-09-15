@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -7,6 +7,9 @@ import { LoginDto } from './dto/login.dto';
 import { LoginResponseType } from './types/login-response.type';
 import { ValidateUserAction } from './actions/validate-user.action';
 import { CreateTokenAction } from './actions/create-token.action';
+import { RegisterDto } from './dto/register.dto';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +17,7 @@ export class AuthService {
     private readonly config: ConfigService,
     private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
   ) {}
 
   async login(loginDto: LoginDto, res: Response): Promise<LoginResponseType> {
@@ -36,5 +40,9 @@ export class AuthService {
       email: user.email,
       token: token,
     };
+  }
+
+  async preRegister(registerDto: RegisterDto) {
+    await this.cache.set('test', registerDto.email ?? registerDto.phone);
   }
 }

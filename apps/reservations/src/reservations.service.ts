@@ -17,8 +17,6 @@ export class ReservationsService {
     return this.reservationsRepo.create({
       ...createReservationDto,
       userId: user._id,
-      createdAt: undefined,
-      updatedAt: undefined,
     });
   }
 

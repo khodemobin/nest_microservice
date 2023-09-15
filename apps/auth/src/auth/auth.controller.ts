@@ -5,6 +5,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { LoginResponseType } from './types/login-response.type';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +18,11 @@ export class AuthController {
   ) {
     const user: LoginResponseType = await this.authService.login(loginDto, res);
     res.send(user);
+  }
+
+  @Post('pre-register')
+  async preRegister(@Body() registerDto: RegisterDto) {
+    await this.authService.preRegister(registerDto);
   }
 
   @UseGuards(JwtAuthGuard)

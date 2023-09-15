@@ -1,21 +1,15 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRepository } from './users.repository';
-import * as bcrypt from 'bcryptjs';
 import { GetUserDto } from './dto/get-user.dto';
+import { CreateUserAction } from './actions/create-user.action';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto) {
-    await this.validateCreateUserDto(createUserDto);
-    return this.userRepository.create({
-      ...createUserDto,
-      password: await bcrypt.hash(createUserDto.password, 10),
-      createdAt: undefined,
-      updatedAt: undefined,
-    });
+    return new CreateUserAction(this.userRepository).run(createUserDto);
   }
 
   async getUser(getUserDto: GetUserDto) {
@@ -24,16 +18,5 @@ export class UsersService {
 
   async findAll() {
     return this.userRepository.find({});
-  }
-
-  private async validateCreateUserDto(createUserDto: CreateUserDto) {
-    try {
-      await this.userRepository.findOne({
-        email: createUserDto.email,
-      });
-    } catch (err) {
-      return;
-    }
-    throw new UnprocessableEntityException('Email already exists');
   }
 }

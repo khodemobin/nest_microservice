@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { CacheModule } from '@app/common';
 
 @Module({
   imports: [
@@ -21,6 +22,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         MONGODB_DB: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION: Joi.number().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
       }),
     }),
     JwtModule.registerAsync({
@@ -32,6 +35,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       }),
       inject: [ConfigService],
     }),
+    CacheModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
