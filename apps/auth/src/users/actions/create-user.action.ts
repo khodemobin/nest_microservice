@@ -17,6 +17,10 @@ export class CreateUserAction {
     return this.userRepository.create({
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
+      emailVerifiedAt: undefined,
+      family: '',
+      name: '',
+      phoneVerifiedAt: undefined,
     });
   }
 }

@@ -1,16 +1,17 @@
 import {
   IsEmail,
-  IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsOptional,
-  IsString,
+  Max,
   MaxLength,
+  Min,
   MinLength,
   Validate,
 } from 'class-validator';
 import { IsEmailOrPhoneConstraint } from './constraints/Is-email-or-phone.constraint';
 
-export class LoginDto {
+export class VerifyDto {
   @IsEmail()
   @IsOptional()
   @Validate(IsEmailOrPhoneConstraint)
@@ -23,7 +24,8 @@ export class LoginDto {
   @Validate(IsEmailOrPhoneConstraint)
   phone: string;
 
-  @IsString()
-  @IsNotEmpty()
-  password: string;
+  @Min(10000)
+  @Max(99999)
+  @IsNumber()
+  code: string;
 }

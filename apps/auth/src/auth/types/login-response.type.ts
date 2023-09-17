@@ -1,5 +1,6 @@
+import { UserResponseType } from './user-response.type';
+
 export interface LoginResponseType {
-  id: string;
-  email: string;
+  user: UserResponseType;
   token: string;
 }

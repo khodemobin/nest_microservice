@@ -1,27 +1,13 @@
-import {
-  IsEmail,
-  IsNumberString,
-  IsOptional,
-  IsStrongPassword,
-  MaxLength,
-  MinLength,
-  Validate,
-} from 'class-validator';
-import { IsEmailOrPhoneConstraint } from './constraints/Is-email-or-phone.constraint';
+import { PartialType } from '@nestjs/mapped-types';
+import { LoginDto } from './login.dto';
+import { IsOptional, IsString } from 'class-validator';
 
-export class RegisterDto {
-  @IsEmail()
+export class RegisterDto extends PartialType(LoginDto) {
+  @IsString()
   @IsOptional()
-  @Validate(IsEmailOrPhoneConstraint)
-  email: string;
+  name: string;
 
-  @MinLength(11)
-  @MaxLength(11)
-  @IsNumberString()
+  @IsString()
   @IsOptional()
-  @Validate(IsEmailOrPhoneConstraint)
-  phone: string;
-
-  @IsStrongPassword()
-  password: string;
+  family: string;
 }
