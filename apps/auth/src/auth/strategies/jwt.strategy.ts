@@ -20,7 +20,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             request?.Authentication ||
             request?.headers.authorization;
 
-          return jwt ? jwt.substring(7, jwt.lenght) : null;
+          // return jwt ? jwt.substring(7, jwt.lenght) : null;
+          return jwt;
         },
       ]),
       ignoreExpiration: false,

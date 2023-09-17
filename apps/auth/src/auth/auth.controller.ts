@@ -33,7 +33,7 @@ export class AuthController {
     });
   }
 
-  @Post('pre-register')
+  @Post('register')
   async preRegister(@Body() registerDto: RegisterDto) {
     await this.authService.preRegister(registerDto);
   }

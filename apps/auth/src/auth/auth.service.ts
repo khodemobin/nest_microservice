@@ -67,6 +67,7 @@ export class AuthService {
     }
 
     const user: UserDocument = await this.userRepository.create({
+      avatar: null,
       phone: cacheUser.phone,
       email: cacheUser.email,
       emailVerifiedAt: verifyDto.email ? new Date() : null,
@@ -76,6 +77,18 @@ export class AuthService {
       phoneVerifiedAt: verifyDto.phone ? new Date() : null,
     });
 
+    const token: string = new LoginUserAction(this.config, this.jwtService).run(
+      user,
+      res,
+    );
+
+    return {
+      user,
+      token,
+    };
+  }
+
+  loginGoogle(user: UserDocument, res: Response) {
     const token: string = new LoginUserAction(this.config, this.jwtService).run(
       user,
       res,

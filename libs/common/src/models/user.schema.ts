@@ -16,6 +16,9 @@ export class UserDocument extends AbstractDocument {
   @Prop({ required: true, unique: true })
   password: string;
 
+  @Prop()
+  avatar: string | null;
+
   emailVerifiedAt: Date | null;
 
   phoneVerifiedAt: Date | null;

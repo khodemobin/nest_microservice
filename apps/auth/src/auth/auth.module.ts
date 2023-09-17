@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { CacheModule } from '@app/common';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { CacheModule } from '@app/common';
     CacheModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy],
 })
 export class AuthModule {}

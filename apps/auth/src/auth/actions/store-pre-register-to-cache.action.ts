@@ -21,7 +21,7 @@ export class StorePreRegisterDataAction {
     });
 
     if (user) {
-      throw new UnprocessableEntityException('email or phone exists');
+      throw new UnprocessableEntityException(['email or phone exists']);
     }
 
     await this.cache.set(
