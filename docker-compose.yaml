@@ -1,5 +1,13 @@
 version: '3'
 services:
+  nest_krakend:
+    container_name: "nest_krakend"
+    image: devopsfaith/krakend
+    ports:
+      - '8080:8080'
+    volumes:
+      - ".:/etc/krakend"
+    command: [ "run", "-dc", "krakend.json" ]
   nest_reservation:
     container_name: nest_reservation
     build:
