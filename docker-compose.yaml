@@ -1,26 +1,14 @@
 version: '3'
 services:
-  nest_krakend:
-    container_name: "nest_krakend"
-    image: devopsfaith/krakend
+  nest_nginx:
+    container_name: nest_nginx
+    image: nginx:alpine
     ports:
-      - '8080:8080'
+      - "80:8000"
+    networks:
+      - nest
     volumes:
-      - ".:/etc/krakend"
-    command: [ "run", "-dc", "krakend.json" ]
-  nest_reservation:
-    container_name: nest_reservation
-    build:
-      context: .
-      dockerfile: ./apps/reservations/Dockerfile
-      target: development
-    command: "pnpm run start:dev reservations"
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/usr/src/app
-    env_file:
-      - ./apps/reservations/.env
+      - './docker/nginx/default.conf:/etc/nginx/conf.d/default.conf'
   nest_auth:
     container_name: nest_auth
     build:
@@ -30,28 +18,19 @@ services:
     command: "pnpm run start:dev auth"
     ports:
       - "3001:3001"
+    networks:
+      - nest
     volumes:
       - .:/usr/src/app
     env_file:
       - ./apps/auth/.env
-  nest_payment:
-    container_name: nest_payment
-    build:
-      context: .
-      dockerfile: ./apps/payments/Dockerfile
-      target: development
-    command: "pnpm run start:dev payments"
-    ports:
-      - "3002:3002"
-    volumes:
-      - .:/usr/src/app
-    env_file:
-      - ./apps/payments/.env
   nest_redis:
     container_name: nest_redis
     image: 'redis:alpine'
     ports:
       - '${FORWARD_REDIS_PORT:-6379}:6379'
+    networks:
+      - nest
     volumes:
       - './docker/data/redis:/data'
     healthcheck:
@@ -61,6 +40,8 @@ services:
   nest_mongodb:
     container_name: nest_mongodb
     image: mongo:latest
+    networks:
+      - nest
     ports:
       - '27017:27017'
     volumes:
@@ -68,3 +49,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: default
       MONGO_INITDB_ROOT_PASSWORD: secret
+
+networks:
+  nest:
+    driver: bridge

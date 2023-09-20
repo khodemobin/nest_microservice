@@ -10,8 +10,10 @@ import { LoginResponseType } from './types/login-response.type';
 import { CurrentUser } from '@app/common/decorators';
 import { UserDocument } from '@app/common/models/user.schema';
 import { UserResponseType } from './types/user-response.type';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Controller('auth')
+@UseGuards(ThrottlerGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

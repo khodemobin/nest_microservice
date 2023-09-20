@@ -8,6 +8,7 @@ import * as Joi from 'joi';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { CacheModule } from '@app/common';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -25,6 +26,15 @@ import { GoogleStrategy } from './strategies/google.strategy';
         JWT_EXPIRATION: Joi.number().required(),
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
+        GOOGLE_CLIENT_ID: Joi.string(),
+        GOOGLE_SECRET: Joi.string().when('GOOGLE_CLIENT_ID', {
+          is: Joi.exist(),
+          then: Joi.required(),
+        }),
+        GOOGLE_CALLBACK_URL: Joi.string().when('GOOGLE_CLIENT_ID', {
+          is: Joi.exist(),
+          then: Joi.required(),
+        }),
       }),
     }),
     JwtModule.registerAsync({
@@ -36,6 +46,12 @@ import { GoogleStrategy } from './strategies/google.strategy';
       }),
       inject: [ConfigService],
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 5,
+      },
+    ]),
     CacheModule,
   ],
   controllers: [AuthController],
