@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LoginResponseType } from './types/login-response.type';
 
-@Controller('google')
+@Controller('auth/google')
 export class GoogleController {
   constructor(private readonly authService: AuthService) {}
 

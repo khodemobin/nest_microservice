@@ -4,7 +4,7 @@ services:
     container_name: nest_nginx
     image: nginx:alpine
     ports:
-      - "80:8000"
+      - "8000:80"
     networks:
       - nest
     volumes:
@@ -24,6 +24,21 @@ services:
       - .:/usr/src/app
     env_file:
       - ./apps/auth/.env
+  nest_notifications:
+    container_name: nest_notifications
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+      target: development
+    command: "pnpm run start:dev notifications"
+    ports:
+      - "3003:3003"
+    networks:
+      - nest
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - ./apps/notifications/.env
   nest_redis:
     container_name: nest_redis
     image: 'redis:alpine'

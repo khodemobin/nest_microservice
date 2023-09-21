@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { CacheModule } from '@app/common';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { GoogleController } from './google.controller';
 
 @Module({
   imports: [
@@ -54,7 +55,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ]),
     CacheModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, GoogleController],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
 })
 export class AuthModule {}
