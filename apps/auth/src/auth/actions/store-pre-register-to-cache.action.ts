@@ -5,6 +5,8 @@ import { random } from 'lodash';
 import { getUserIdentifier } from '../helpers/user.helper';
 import { UserRepository } from '../../users/users.repository';
 import { UnprocessableEntityException } from '@nestjs/common';
+import { FilterQuery } from 'mongoose';
+import { UserDocument } from '@app/common/models/user.schema';
 
 export class StorePreRegisterDataAction {
   constructor(
@@ -15,14 +17,7 @@ export class StorePreRegisterDataAction {
   async run(registerDto: RegisterDto): Promise<number> {
     const otpCode: number = random(10000, 99999);
     const identifier: string = getUserIdentifier(registerDto);
-
-    const user = this.userRepository.findOne({
-      $or: [{ email: registerDto.email }, { phone: registerDto.phone }],
-    });
-
-    if (user) {
-      throw new UnprocessableEntityException(['email or phone exists']);
-    }
+    await this.findUser(registerDto);
 
     await this.cache.set(
       `preRegister:${identifier}:${otpCode}`,
@@ -37,5 +32,26 @@ export class StorePreRegisterDataAction {
     );
 
     return otpCode;
+  }
+
+  private async findUser(registerDto: RegisterDto) {
+    const query: FilterQuery<UserDocument> = {};
+
+    if (registerDto.email) {
+      query.$or = [{ username: registerDto.email }];
+    }
+
+    if (registerDto.phone) {
+      if (!query.$or) query.$or = [];
+      query.$or.push({ email: registerDto.phone });
+    }
+
+    try {
+      await this.userRepository.findOne(query);
+    } catch (err) {
+      return;
+    }
+
+    throw new UnprocessableEntityException(['email or phone exists']);
   }
 }

@@ -20,6 +20,8 @@ import { getUserIdentifier } from './helpers/user.helper';
 import { UserDocument } from '@app/common/models/user.schema';
 import { CacheUserType } from './types/cache-user.type';
 import { LoginUserAction } from './actions/login-user.action';
+import { NOTIFICATION_SERVICE } from '@app/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +30,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
     @Inject(CACHE_MANAGER) private readonly cache: Cache,
+    @Inject(NOTIFICATION_SERVICE)
+    private readonly notificationClient: ClientProxy,
   ) {}
 
   @Post()
@@ -53,7 +57,7 @@ export class AuthService {
       this.cache,
       this.userRepository,
     ).run(registerDto);
-    await new SendOtpAction().run(otpCode);
+    await new SendOtpAction(this.notificationClient).run(otpCode);
   }
 
   async verify(verifyDto: VerifyDto, res: Response) {

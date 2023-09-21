@@ -6,10 +6,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { CacheModule } from '@app/common';
+import { CacheModule, NOTIFICATION_SERVICE } from '@app/common';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { GoogleController } from './google.controller';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -36,6 +37,8 @@ import { GoogleController } from './google.controller';
           is: Joi.exist(),
           then: Joi.required(),
         }),
+        NOTIFICATION_HOST: Joi.string().required(),
+        NOTIFICATION_PORT: Joi.number().required(),
       }),
     }),
     JwtModule.registerAsync({
@@ -54,6 +57,19 @@ import { GoogleController } from './google.controller';
       },
     ]),
     CacheModule,
+    ClientsModule.registerAsync([
+      {
+        name: NOTIFICATION_SERVICE,
+        useFactory: (config: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: config.get('NOTIFICATION_HOST'),
+            port: config.get('NOTIFICATION_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [AuthController, GoogleController],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
